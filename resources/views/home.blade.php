@@ -2,21 +2,17 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    {{ __('You are logged in!') }}
-                </div>
+    <div class="row">
+        @foreach($news as $new)
+            <div class="col-4">
+                <a class="card text-decoration-none text-secondary" href="{{ route('news.show', $new->slug) }}">
+                    <img src="{{ $new->image }}" class="card-img-top" alt="{{ $new->title }}">
+                    <div class="card-body">
+                        <p class="card-text fs-5 lh-base">{{ $new->title }}</p>
+                    </div>
+                </a>
             </div>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection

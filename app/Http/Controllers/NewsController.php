@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNewsRequest;
+use App\Http\Requests\UpdateNewsRequest;
 use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -46,9 +48,19 @@ class NewsController extends Controller
         $new->category_id = $request->post('category_id');
         $new->image = $request->post('image_url');
         $new->views = 0;
+        $new->slug = 0;
         $new->save();
 
-        return redirect()->route('news.show', $new);
+        $slug = Str::slug($request->post('title'));
+
+        if(News::where('slug', $slug)->exists()) {
+            $slug = $slug . '-' . $new->id;
+        }
+
+        $new->slug = $slug;
+        $new->save();
+
+        return redirect()->route('news.show', $new->slug);
     }
 
     /**
@@ -57,9 +69,9 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $new = News::findOrFail($id);
+        $new = News::where('slug', $slug)->firstOrFail();
         return view('news.single', compact('new'));
     }
 
@@ -71,7 +83,10 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $new = News::findOrFail($id);
+        $categories = Category::all();
+
+        return view('news.edit', compact('new', 'categories'));
     }
 
     /**
@@ -81,9 +96,16 @@ class NewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateNewsRequest $request, $id)
     {
-        //
+        $new = News::findOrFail($id);
+        $new->title = $request->post('title');
+        $new->content = $request->post('content');
+        $new->category_id = $request->post('category_id');
+        $new->image = $request->post('image_url');
+        $new->save();
+
+        return redirect()->route('news.edit', $new->slug)->withSuccess('Update success');
     }
 
     /**
