@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $news = News::all();
+        $news = News::latest()->paginate(6);
         return view('home', compact('news'));
     }
 }

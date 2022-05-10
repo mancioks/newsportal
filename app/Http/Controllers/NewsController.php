@@ -130,7 +130,7 @@ class NewsController extends Controller
         $query = $request->get('s');
 
         if(!empty($query)) {
-            $news = News::search($query)->get();
+            $news = News::search($query)->paginate(6)->appends('query')->withQueryString();
         } else {
             $news = [];
         }

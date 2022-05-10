@@ -14,5 +14,8 @@
             </div>
         @endforeach
     </div>
+    <div>
+        {{ $news->links('pagination::bootstrap-5') }}
+    </div>
 </div>
 @endsection

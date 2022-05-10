@@ -61,9 +61,11 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('news.create') }}">
-                                        Add article
-                                    </a>
+                                    @if( Auth::user()->role->name == 'publisher')
+                                        <a class="dropdown-item" href="{{ route('news.create') }}">
+                                            Add article
+                                        </a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
