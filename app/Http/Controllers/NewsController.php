@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,6 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::all();
     }
 
     /**
@@ -29,11 +29,6 @@ class NewsController extends Controller
      */
     public function create()
     {
-//        if(!auth()->check() || auth()->user()->role->name != 'publisher')
-//            abort(403);
-
-
-
         $categories = Category::all();
         return view('news.create', compact('categories'));
     }
@@ -128,5 +123,18 @@ class NewsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('s');
+
+        if(!empty($query)) {
+            $news = News::search($query)->get();
+        } else {
+            $news = [];
+        }
+
+        return view('news.searchresults', compact('news'));
     }
 }

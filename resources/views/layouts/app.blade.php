@@ -26,10 +26,13 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                <form action="{{ route('news.search') }}" class="input-group mb-0 m-auto w-50" method="get">
+                    <input type="text" class="form-control" name="s" placeholder="Search">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                </form>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">

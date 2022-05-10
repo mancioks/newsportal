@@ -24,7 +24,9 @@ Route::get('/home', function () {
 });
 
 // comment route only for authenticated user
-Route::get('/comment/{new_id}', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store')->middleware('auth');
+Route::put('/comment/{new_id}', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store')->middleware('auth');
+
+Route::get('/news/search', [\App\Http\Controllers\NewsController::class, 'search'])->name('news.search');
 
 // whole newsController only accessible by publisher
 Route::middleware(['publisher'])->group(function () {
