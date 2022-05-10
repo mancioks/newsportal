@@ -29,6 +29,11 @@ class NewsController extends Controller
      */
     public function create()
     {
+//        if(!auth()->check() || auth()->user()->role->name != 'publisher')
+//            abort(403);
+
+
+
         $categories = Category::all();
         return view('news.create', compact('categories'));
     }
@@ -72,7 +77,13 @@ class NewsController extends Controller
     public function show($slug)
     {
         $new = News::where('slug', $slug)->firstOrFail();
-        return view('news.single', compact('new'));
+
+        //$comments = $new->comments()->paginate(5);
+        $comments = $new->comments()->latest()->get();
+
+        $related_news = News::where('category_id', $new->category_id)->whereNot('id', $new->id)->get();
+
+        return view('news.single', compact('new', 'comments', 'related_news'));
     }
 
     /**

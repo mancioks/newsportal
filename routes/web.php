@@ -23,4 +23,13 @@ Route::get('/home', function () {
     return redirect()->route('home');
 });
 
-Route::resource('news', 'App\Http\Controllers\NewsController');
+// comment route only for authenticated user
+Route::get('/comment/{new_id}', [\App\Http\Controllers\CommentController::class, 'store'])->name('comment.store')->middleware('auth');
+
+// whole newsController only accessible by publisher
+Route::middleware(['publisher'])->group(function () {
+    Route::resource('news', 'App\Http\Controllers\NewsController');
+});
+
+// and exception to view single article for everyone
+Route::get('/{slug}', [\App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
